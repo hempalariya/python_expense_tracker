@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <div class="flex gap-2">
+        <div class="text-stone-200 my-10 rounded-md shadow-stone-400 shadow-xs p-4">
+            <h3 class="font-bold text-lg">Filters</h3>
+            <form action="" class="flex justify-between ">
+                <div >
+                    <label for="start-date">Start</label>
+                    <input type="date" id="start">
+                </div>
+                <div>
+                    <label for="end-date">End</label>
+                    <input type="date" id="end">
+                </div>
+                <button type="submit">Apply</button>
+                <button type="button">Reset</button>
+            </form>
+        </div>
+        <div class="text-stone-200 my-10 rounded-md shadow-stone-400 shadow-xs p-4">
+            <h3>
+                Add Expenses
+                <form action="">
+                    <div>
+                        <label for="description">Description</label>
+                        <input type="text" placeholder="e.g. Groceries">
+                    </div>
+                </form>
+            </h3>
+        </div>
+    </div>
+{% endblock %}
