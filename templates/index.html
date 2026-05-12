@@ -4,41 +4,72 @@
     class="text-stone-200 my-10 rounded-md shadow-stone-400 shadow-xs p-4 w-[70%]"
   >
     <h3 class="font-bold text-lg mb-3">Filters</h3>
-    <form action="" class="flex justify-between">
+    <form
+      method="get"
+      action="{{url_for('index')}}"
+      class="flex justify-between"
+    >
       <div>
         <label for="start-date">Start</label>
-        <input type="date" id="start" class="bg-stone-600 rounded-md px-2" />
+        <input
+          name="start"
+          value="{{start_str or ''}}"
+          type="date"
+          id="start"
+          class="bg-stone-600 rounded-md px-2"
+        />
       </div>
       <div>
         <label for="end-date">End</label>
-        <input type="date" id="end" class="bg-stone-600 rounded-md px-2" />
+        <input
+          name="end"
+          value="{{end_str or ''}}"
+          type="date"
+          id="end"
+          class="bg-stone-600 rounded-md px-2"
+        />
       </div>
       <div class="flex gap-2">
-        <button
-          type="submit"
-          class="bg-teal-100 text-teal-500 px-2 py-1 rounded-md"
+        <label for="category">Category</label>
+        <select
+          name="category"
+          id=""
+          class="bg-stone-600 rounded-md px-2 w-full"
         >
+          <option value="All">All</option>
+          {% for c in categories %}
+          <option value="{{c}}" {% if selected_category == c %} selected {% endif %}>{{c}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="flex gap-2">
+        <button class="bg-teal-100 text-teal-500 px-2 py-1 rounded-md">
           Apply
         </button>
-        <button type="button" class="bg-stone-600 px-2 py-1 rounded-md">
+        <a href="{{url_for('index')}}" class="bg-stone-600 px-2 py-1 rounded-md">
           Reset
-        </button>
+        </a>
       </div>
     </form>
+    <div class="text-lg mt-3">
+      Total:
+      <span class="bg-stone-600 rounded-md px-4 py-1">₹{{total_spent}}</span>
+    </div>
   </div>
   <div
     class="text-stone-200 my-10 rounded-md shadow-stone-400 shadow-xs p-4 w-[30%]"
   >
     <h3 class="font-bold text-lg mb-3">Add Expenses</h3>
-    <form action="" class="flex flex-col gap-2">
+    <form method="post" action="{{url_for('add')}}" class="flex flex-col gap-2">
       <div class="flex flex-col">
         <label for="description">Description</label>
-        <input type="text" placeholder="e.g. Groceries" />
+        <input name="description" type="text" placeholder="e.g. Groceries" />
       </div>
       <div class="flex gap-3">
         <div class="flex flex-col">
           <label for="amount">Amount</label>
           <input
+            name="amount"
             type="text"
             placeholder="25.00"
             class="bg-stone-600 rounded-md px-2 w-full"
@@ -46,15 +77,24 @@
         </div>
         <div class="flex flex-col">
           <label for="date">Date</label>
-          <input type="date" class="bg-stone-600 rounded-md px-2 w-full" />
+          <input
+            name="date"
+            type="date"
+            value="{{today}}"
+            class="bg-stone-600 rounded-md px-2 w-full"
+          />
         </div>
       </div>
       <div class="flex flex-col">
         <label for="category">Category</label>
-        <select name="" id="" class="bg-stone-600 rounded-md px-2 w-full">
-          <option value="">Food</option>
-          <option value="">utilities</option>
-          <option value="">Medical</option>
+        <select
+          name="category"
+          id=""
+          class="bg-stone-600 rounded-md px-2 w-full"
+        >
+          {% for c in categories %}
+          <option value="{{c}}">{{c}}</option>
+          {% endfor %}
         </select>
       </div>
       <button
@@ -68,7 +108,7 @@
 </div>
 
 <div class="text-stone-200 text-lg">
-  Total: <span class="bg-stone-600 rounded-md px-4 py-2">₹0.00</span>
+  Total: <span class="bg-stone-600 rounded-md px-4 py-2">₹{{total_spent}}</span>
 </div>
 
 <div
@@ -83,15 +123,19 @@
       <th>Amount</th>
       <th></th>
     </thead>
+    {% for exp in expenses %}
     <tr>
-      <td>12/05/2026</td>
-      <td>groceries</td>
-      <td>food</td>
-      <td>15</td>
+      <td>{{exp.date}}</td>
+      <td>{{exp.description}}</td>
+      <td>{{exp.category}}</td>
+      <td>{{exp.amount}}</td>
       <td>
-        <button>🗑️</button>
+        <form action="{{url_for('delete', expense_id=exp.id)}}" method="post">
+          <button>🗑️</button>
+        </form>
       </td>
     </tr>
+    {% endfor %}
   </table>
 </div>
 
