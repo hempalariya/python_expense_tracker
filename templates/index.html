@@ -139,12 +139,63 @@
   </table>
 </div>
 
-<div class="text-white">
-  <div>
-    <p>by category</p>
+<div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
+  <div class="rounded-2xl p-4">
+     <h3 class="font-semibold mb-2 text-stone-200">By Category</h3>
+     <canvas height="140" id="catChart"></canvas>
   </div>
-  <div>
-    <p>spending over time</p>
+  <div class="rounded-2xl p-4">
+    <h3 class="font-semibold mb-2 text-stone-200">Spending Over Time</h3>
+    <canvas height="140" id="dayChart"></canvas>
   </div>
 </div>
+
+
+<script>
+  const catLabels = {{(cat_labels or []) | tojson}}
+  const catValues = {{(cat_values or []) | tojson}}
+
+  const dayLabels = {{(day_labels or []) | tojson}}
+  const dayValues = {{(day_values or []) | tojson}}
+
+
+  if (document.getElementById('catChart')){
+    const catCtx = document.getElementById('catChart').getContext('2d')
+
+    new Chart(catCtx, {
+      type: 'pie',
+      data: {labels: catLabels, datasets: [{data: catValues}]},
+      options: {plugins: {legend: {labels: {color: '#cbd5e'}}}}
+    })
+  }
+
+  if (document.getElementById('dayChart')){
+    const dayCtx = document.getElementById('dayChart').getContext('2d')
+
+    new Chart(dayCtx, {
+      type: 'bar',
+      data: {
+        labels: dayLabels,
+        datasets: [{
+          label: 'Total', 
+          data: dayValues
+        }]
+      },
+      options:{
+        plugins: {
+          legend: {
+            labels:{
+              color:'#334155'
+            }
+          }
+        },
+        scales:{
+          x: {ticks: {clolor: '#cbd5e1'}, grid:{color: '#334155'}},
+          y: {ticks: {clolor: '#cbd5e1'}, grid:{color: '#334155'}}
+        }
+      }
+    })
+  }
+
+</script>
 {% endblock %}

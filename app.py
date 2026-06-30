@@ -62,6 +62,9 @@ def index():
 
     total_spent = round(sum(e.amount for e in expenses), 2)
 
+
+# pie chart
+
     cat_q = db.session.query(Expense.category, func.sum(Expense.amount))
     
     if start_date:
@@ -77,8 +80,21 @@ def index():
     cat_labels = [c for c, _ in cat_row]
     cat_values = [round(float(s or 0), 2) for _, s in cat_row]
 
+# day chart
+    day_q = db.session.query(Expense.date, func.sum(Expense.amount))
+    
+    if start_date:
+        day_q = day_q.filter(Expense.date >= start_date)
+    
+    if end_date:
+        day_q = day_q.filter(Expense.date <= end_date)
 
-
+    if selected_category:
+        day_q = day_q.filter(Expense.category == selected_category)
+    
+    day_row = day_q.group_by(Expense.date).order_by(Expense.date).all()
+    day_labels = [d.isoformat() for d, _ in day_row]
+    day_values = [round(float(s or 0), 2) for _, s in day_row]
 
 
     return render_template(
@@ -91,7 +107,9 @@ def index():
                             end_str=end_str,
                             selected_category=selected_category,
                             cat_labels = cat_labels,
-                            cat_values=cat_values
+                            cat_values=cat_values,
+                            day_labels=day_labels,
+                            day_values=day_values
                             )
 
 @app.route("/add", methods = ["POST"])
