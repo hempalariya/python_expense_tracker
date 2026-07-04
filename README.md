@@ -67,3 +67,9 @@ python_expense_tracker/
 | `/edit/<expense_id>` | GET, POST | Edit an existing expense |
 | `/delete/<expense_id>` | POST | Delete an expense |
 | `/export.csv` | GET | Export filtered expenses as a CSV file |
+
+## Demo
+<img width="1920" height="1032" alt="Screenshot 2026-07-04 123110" src="https://github.com/user-attachments/assets/20fe52c7-edeb-48b1-9767-fbe0579af4f2" />
+<img width="1920" height="1032" alt="Screenshot 2026-07-04 123126" src="https://github.com/user-attachments/assets/3ab0910c-671b-470c-825e-91b4203042f5" />
+<img width="1920" height="1032" alt="Screenshot 2026-07-04 123116" src="https://github.com/user-attachments/assets/da8f5eb2-6ef4-4c98-864d-320116183f52" />
+
