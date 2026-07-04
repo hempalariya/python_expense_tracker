@@ -213,10 +213,10 @@ def edit(expense_id):
     e = Expense.query.get_or_404(expense_id)
 
     if request.method == 'POST':
-        description = request.form.get('description')
-        amount_str = request.form.get('amount')
-        category = request.form.get('category')
-        date_str = request.form.get('date')
+        description = (request.form.get('description') or "").strip()
+        amount_str = (request.form.get('amount') or "").strip()
+        category = (request.form.get('category') or "").strip()
+        date_str = (request.form.get('date') or "").strip()
 
         if not amount_str or not category:
             return "Amount and category are required", 400
