@@ -198,7 +198,7 @@ def export_csv():
 
     fname_start = start_str or "all"
     fname_end = end_str or "all"
-    filename = f"expenses_{fname_start}_to_{end_date}.csv"
+    filename = f"expenses_{fname_start}_to_{fname_end}.csv"
 
     return Response(
         csv_data,
@@ -208,6 +208,37 @@ def export_csv():
         }
     )
 
+@app.route('/edit/<int:expense_id>', methods = ['GET', 'POST'])
+def edit(expense_id):
+    e = Expense.query.get_or_404(expense_id)
+
+    if request.method == 'POST':
+        description = request.form.get('description')
+        amount_str = request.form.get('amount')
+        category = request.form.get('category')
+        date_str = request.form.get('date')
+
+        if not amount_str or not category:
+            return "Amount and category are required", 400
+        try:
+            amount = float(amount_str)
+        except ValueError:
+            return "Amount must be a valid number", 400
+
+        if date_str:
+            expense_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        else:
+            expense_date = date.today()
+
+        e.description = description
+        e.amount = amount
+        e.category = category
+        e.date = expense_date
+
+        db.session.commit()
+        return redirect(url_for("index"))
+
+    return render_template("edit.html", expense = e, categories = CATEGORIES, today = date.today().isoformat())
 
 if __name__ == "__main__":
     app.run(debug=True)
